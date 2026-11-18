@@ -307,3 +307,11 @@ h1 em{background:linear-gradient(90deg,var(--accent),var(--plum) 60%,var(--gold)
 .theme{background:var(--surface);border-color:var(--line)}
 
 .qlink{color:var(--accent);font-weight:600;text-decoration:none}
+
+.qbtn-top{text-decoration:none;font-size:13px;font-weight:700;white-space:nowrap;padding:8px 14px;border-radius:999px;color:#1a1020;background:linear-gradient(135deg,#f6a5c8,#c3a6f2);margin-left:10px;box-shadow:0 4px 14px rgba(246,165,200,.25)}
+.qbtn-top:hover{filter:brightness(1.08)}
+.qbtn-top[hidden]{display:none}
+@media (max-width:760px){.qbtn-top{margin-left:auto;margin-right:8px;padding:7px 12px;font-size:12.5px}}
+@media (max-width:760px){.ql-long{display:none}.qbtn-top{margin-right:6px}.topbar-in .theme{flex-shrink:0}}
+@media (max-width:480px){.brand span{font-size:14px}.brand{gap:8px;min-width:0}.qbtn-top{padding:6px 11px;font-size:12px;margin-right:4px}}
+.ql-short{display:none}@media (max-width:760px){.ql-short{display:inline}}
