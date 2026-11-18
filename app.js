@@ -54,7 +54,7 @@ document.querySelectorAll('#stamp,#stamp2').forEach(el => el.innerHTML = `<i></i
 // ---------- HERO KPIs
 const unit = tasks.filter(t => t['Due Date'] && t.Status !== 'Completed').map(t => ({t, d: parseDate(t['Due Date'])})).filter(x => x.d && dayDiff(x.d) >= 0).sort((a,b)=>a.d-b.d)[0];
 const kp = [
-  {l:'Projects', v:projects.length, s:`${projects.filter(p=>p.Phase==='Active').length} active · ${projects.filter(p=>p.Phase==='Backlog').length} backlog`},
+  {l:'Projects', v:projects.length, s:Object.entries(projects.reduce((a,p)=>(a[p.Phase||'Other']=(a[p.Phase||'Other']||0)+1,a),{})).map(([k,v])=>`${v} ${k.toLowerCase()}`).join(' · ')},
   {l:'Open tasks', v:openTasks.length, s:`${doneTasks} completed · ${hours.toFixed(1)} hrs planned`},
   {l:'Casting submissions', v:casting.length, s:`${new Set(casting.map(c=>c.Platform)).size} platforms · 0 bookings yet`},
   unit ? {l:'Next deadline', v: dayDiff(unit.d)===0 ? 'Today' : `${dayDiff(unit.d)}d`, s: unit.t['Small Objective'].replace('Complete and submit ',''), a:true}
