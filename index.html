@@ -7,7 +7,7 @@
 <title>Shay · Command Center</title>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=boska@500,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=5">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -22,8 +22,11 @@
       <a href="#portfolio">Projects</a>
       <a href="#week">Week</a>
       <a href="#books">Books</a>
+      <a href="#commerce">Drops</a>
+      <a href="#marketing">Marketing</a>
       <a href="#career">Casting</a>
       <a href="#agencies">Agencies</a>
+      <a href="#health">Health</a>
       <a href="#links">Links</a>
     </nav>
     <a id="quickNav" class="qbtn-top" href="#" target="_blank" rel="noopener" hidden>+ <span class="ql-long">Quick update</span><span class="ql-short">Update</span></a>
@@ -63,7 +66,7 @@
 
   <!-- PORTFOLIO -->
   <section id="portfolio" class="wrap section">
-    <div class="sec-head"><span class="num">02</span><h2>Project portfolio</h2><p>16 projects across 11 life areas</p></div>
+    <div class="sec-head"><span class="num">02</span><h2>Project portfolio</h2><p id="portSub">16 projects across 11 life areas</p></div>
     <div class="grid-2">
       <div class="card"><h3>Planned hours by area</h3><div class="chart-box"><canvas id="areaChart"></canvas></div></div>
       <div class="card"><h3>Priority mix</h3><div class="chart-box"><canvas id="prioChart"></canvas></div><div id="prioLegend" class="legend"></div></div>
@@ -86,6 +89,11 @@
         <div class="card-head"><h3>Two-week execution plan</h3><div class="chips" id="weekToggle"></div></div>
         <div class="exec-list" id="execList"></div>
       </div>
+      <div class="card mt">
+        <div class="card-head"><h3>Execution &amp; capacity</h3><p class="muted small" id="capSummary"></p></div>
+        <div class="cap-list" id="capList"></div>
+        <div class="cap-rules" id="capRules"></div>
+      </div>
     </div>
   </section>
 
@@ -94,12 +102,34 @@
     <div class="sec-head"><span class="num">05</span><h2>Book publishing tracker</h2><p>Next steps, target dates and launch countdown</p></div>
     <div class="cd" id="bookCountdown"></div>
     <div class="books" id="bookGrid"></div>
+    <div class="card mt">
+      <div class="card-head"><h3>Publishing readiness</h3><p class="muted small">Production checklist per book</p></div>
+      <div class="table-wrap"><table class="tbl matrix" id="readyTable"></table></div>
+    </div>
+  </section>
+
+  <!-- COMMERCE -->
+  <section id="commerce" class="band">
+    <div class="wrap">
+      <div class="sec-head"><span class="num">06</span><h2>Sneaker &amp; tee drops</h2><p>Shirts go live at least 7 days before each shoe release</p></div>
+      <div class="drops" id="dropGrid"></div>
+      <div class="card mt">
+        <div class="card-head"><h3>Commercial metrics</h3><p class="muted small" id="metricSummary"></p></div>
+        <div class="table-wrap"><table class="tbl" id="metricTable"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARKETING -->
+  <section id="marketing" class="wrap section">
+    <div class="sec-head"><span class="num">07</span><h2>Marketing strategy</h2><p id="mkSummary"></p></div>
+    <div class="mk-grid" id="mkGrid"></div>
   </section>
 
   <!-- CAREER -->
   <section id="career" class="band dark">
     <div class="wrap">
-      <div class="sec-head"><span class="num">06</span><h2>Acting &amp; modeling career</h2><p>Shay Agency Career Tracker</p></div>
+      <div class="sec-head"><span class="num">08</span><h2>Acting &amp; modeling career</h2><p>Shay Agency Career Tracker</p></div>
       <div class="kpi-row" id="castKpis"></div>
       <div class="grid-2 mt">
         <div class="card"><h3>Submissions by day</h3><div class="chart-box"><canvas id="dayChart"></canvas></div></div>
@@ -120,7 +150,7 @@
 
   <!-- 90 DAY + AGENCIES -->
   <section id="agencies" class="wrap section">
-    <div class="sec-head"><span class="num">07</span><h2>90-day plan &amp; representation</h2><p id="ninetySummary"></p></div>
+    <div class="sec-head"><span class="num">09</span><h2>90-day plan &amp; representation</h2><p id="ninetySummary"></p></div>
     <div class="phases" id="phases"></div>
     <div class="agency-grid" id="agencyGrid"></div>
     <div class="grid-2 mt">
@@ -129,10 +159,23 @@
     </div>
   </section>
 
+  <!-- HEALTH -->
+  <section id="health" class="wrap section">
+    <div class="sec-head"><span class="num">10</span><h2>Data health &amp; evidence</h2><p>What still needs a date, a link or a confirmation</p></div>
+    <div class="grid-2">
+      <div class="card"><h3>Date coverage</h3><div id="coverage"></div></div>
+      <div class="card"><h3>Quality checks</h3><div id="quality"></div></div>
+    </div>
+    <div class="card mt">
+      <div class="card-head"><h3>Completion evidence review</h3><p class="muted small" id="evSummary"></p></div>
+      <div class="table-wrap"><table class="tbl" id="evTable"></table></div>
+    </div>
+  </section>
+
   <!-- LINKS -->
   <section id="links" class="band">
     <div class="wrap">
-      <div class="sec-head"><span class="num">08</span><h2>Links &amp; working plans</h2><p>Every source file, one click away</p></div>
+      <div class="sec-head"><span class="num">11</span><h2>Links &amp; working plans</h2><p>Every source file, one click away</p></div>
       <div class="links" id="linkList"></div>
     </div>
   </section>
@@ -144,6 +187,7 @@
 </footer>
 
 <script src="data.js?v=202611180343"></script>
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
+<script src="extras.js?v=2"></script>
 </body>
 </html>
