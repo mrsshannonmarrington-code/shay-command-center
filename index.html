@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#17151c">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shay · Command Center</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=boska@500,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="#top" aria-label="Shay Command Center">
+      <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="none" stroke="currentColor" stroke-width="2"/><path d="M21 11.5c-1-1.6-2.8-2.5-5-2.5-3 0-5 1.6-5 3.8 0 5 10 2.6 10 7.6 0 2.3-2.2 3.6-5 3.6-2.4 0-4.3-1-5.3-2.8" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <span>Shay<b>·</b>Command Center</span>
+    </a>
+    <nav class="nav">
+      <a href="#today">Today</a>
+      <a href="#portfolio">Projects</a>
+      <a href="#week">Week</a>
+      <a href="#books">Books</a>
+      <a href="#career">Casting</a>
+      <a href="#agencies">Agencies</a>
+      <a href="#links">Links</a>
+    </nav>
+    <button class="theme" id="themeBtn" aria-label="Toggle dark mode">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero wrap">
+    <div class="hero-copy">
+      <p class="eyebrow">Career · Finance · Education · Creative · Entertainment</p>
+      <h1>Everything in motion,<br><em>on one page.</em></h1>
+      <p class="lede">A live view of your Personal &amp; Professional Command Center and your Shay Agency Career Tracker.</p>
+      <p class="stamp" id="stamp"></p>
+    </div>
+    <div class="hero-kpis" id="heroKpis"></div>
+  </section>
+
+  <!-- TODAY -->
+  <section id="today" class="band">
+    <div class="wrap">
+      <div class="sec-head"><span class="num">01</span><h2>Daily executive brief</h2><p id="todayLabel"></p></div>
+      <div class="grid-today">
+        <div class="card deadline-card" id="deadlines"></div>
+        <div class="card" id="dayTheme"></div>
+        <div class="card" id="exceptions"></div>
+      </div>
+      <div class="card mt">
+        <div class="card-head"><h3>Priority tasks</h3><div class="chips" id="taskFilter"></div></div>
+        <div class="table-wrap tall"><table class="tbl" id="taskTable"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio" class="wrap section">
+    <div class="sec-head"><span class="num">02</span><h2>Project portfolio</h2><p>16 projects across 11 life areas</p></div>
+    <div class="grid-2">
+      <div class="card"><h3>Planned hours by area</h3><div class="chart-box"><canvas id="areaChart"></canvas></div></div>
+      <div class="card"><h3>Priority mix</h3><div class="chart-box"><canvas id="prioChart"></canvas></div><div id="prioLegend" class="legend"></div></div>
+    </div>
+    <div class="proj-grid" id="projGrid"></div>
+  </section>
+
+  <!-- MILESTONES -->
+  <section class="wrap section">
+    <div class="sec-head"><span class="num">03</span><h2>Milestone timeline</h2><p id="msSummary"></p></div>
+    <div class="card"><div class="timeline" id="timeline"></div></div>
+  </section>
+
+  <!-- WEEK -->
+  <section id="week" class="band">
+    <div class="wrap">
+      <div class="sec-head"><span class="num">04</span><h2>Weekly focus blocks</h2><p>Work stays protected Mon–Fri, 9–5. Focus happens evenings and weekends.</p></div>
+      <div class="week" id="weekGrid"></div>
+      <div class="card mt">
+        <div class="card-head"><h3>Two-week execution plan</h3><div class="chips" id="weekToggle"></div></div>
+        <div class="exec-list" id="execList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKS -->
+  <section id="books" class="wrap section">
+    <div class="sec-head"><span class="num">05</span><h2>Book publishing tracker</h2><p>Every manuscript still needs verification</p></div>
+    <div class="books" id="bookGrid"></div>
+  </section>
+
+  <!-- CAREER -->
+  <section id="career" class="band dark">
+    <div class="wrap">
+      <div class="sec-head"><span class="num">06</span><h2>Acting &amp; modeling career</h2><p>Shay Agency Career Tracker</p></div>
+      <div class="kpi-row" id="castKpis"></div>
+      <div class="grid-2 mt">
+        <div class="card"><h3>Submissions by day</h3><div class="chart-box"><canvas id="dayChart"></canvas></div></div>
+        <div class="card"><h3>Submissions by platform</h3><div class="chart-box"><canvas id="platChart"></canvas></div><div id="platLegend" class="legend"></div></div>
+      </div>
+      <div class="card mt">
+        <div class="card-head"><h3>Paid opportunities with listed rates</h3><p class="muted small">Sorted by pay offered</p></div>
+        <div class="pay-bars" id="payBars"></div>
+      </div>
+      <div class="card mt">
+        <div class="card-head"><h3>All casting submissions</h3>
+          <div class="tools"><input id="castSearch" type="search" placeholder="Search roles or projects"><div class="chips" id="castFilter"></div></div>
+        </div>
+        <div class="table-wrap tall"><table class="tbl" id="castTable"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 90 DAY + AGENCIES -->
+  <section id="agencies" class="wrap section">
+    <div class="sec-head"><span class="num">07</span><h2>90-day plan &amp; representation</h2><p id="ninetySummary"></p></div>
+    <div class="phases" id="phases"></div>
+    <div class="agency-grid" id="agencyGrid"></div>
+    <div class="grid-2 mt">
+      <div class="card"><h3>Startup budget</h3><div id="budget"></div></div>
+      <div class="card letter"><h3>Agency inquiry email</h3><div id="email"></div></div>
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <section id="links" class="band">
+    <div class="wrap">
+      <div class="sec-head"><span class="num">08</span><h2>Links &amp; working plans</h2><p>Every source file, one click away</p></div>
+      <div class="links" id="linkList"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <p>Built from <a href="https://docs.google.com/spreadsheets/d/1BNuzDPteb5o3aWw8BGTVCxKv6CaghTq3r7yRz0uzkAM/edit" target="_blank" rel="noopener">Personal_Professional_Command_Center</a> and <a href="https://docs.google.com/spreadsheets/d/11rFE_DhCkpnSvFVJx7XExSKAeaIAcAqPItwBajXIasQ/edit" target="_blank" rel="noopener">Shay_Agency_Career_Tracker</a>.</p>
+  <p id="stamp2"></p>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
