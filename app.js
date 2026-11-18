@@ -52,7 +52,7 @@ document.querySelectorAll('#stamp,#stamp2').forEach(el => el.innerHTML = `<i></i
 // ---------- HERO KPIs
 const unit = tasks.filter(t => t['Due Date']).map(t => ({t, d: parseDate(t['Due Date'])})).filter(x => x.d && dayDiff(x.d) >= 0).sort((a,b)=>a.d-b.d)[0];
 const kp = [
-  {l:'Active projects', v:projects.length, s:`${projects.filter(p=>p.Phase==='Active').length} active · ${projects.filter(p=>p.Phase==='Backlog').length} backlog`},
+  {l:'Projects', v:projects.length, s:`${projects.filter(p=>p.Phase==='Active').length} active · ${projects.filter(p=>p.Phase==='Backlog').length} backlog`},
   {l:'Open tasks', v:openTasks.length, s:`${doneTasks} completed · ${hours.toFixed(1)} hrs planned`},
   {l:'Casting submissions', v:casting.length, s:`${new Set(casting.map(c=>c.Platform)).size} platforms · 0 bookings yet`},
   unit ? {l:'Next deadline', v: dayDiff(unit.d)===0 ? 'Today' : `${dayDiff(unit.d)}d`, s: unit.t['Small Objective'].replace('Complete and submit ',''), a:true}
@@ -64,7 +64,7 @@ $('#heroKpis').innerHTML = kp.map(k => `<div class="kpi ${k.a?'accent':''}"><spa
 $('#todayLabel').textContent = `${DAYS[TODAY.getDay()]}, ${MON[TODAY.getMonth()]} ${TODAY.getDate()}, ${TODAY.getFullYear()}`;
 const upcoming = [];
 tasks.forEach(t => { const d = parseDate(t['Due Date']); if(d) upcoming.push({d, title:t['Small Objective'], sub:`Task ${t['Task ID']} · ${t['Definition of Done']}`, kind:'Due'}); });
-casting.forEach(c => { const d = parseDate(c['Audition date']); if(d) upcoming.push({d, title:`Audition: ${c['Project / casting']}`, sub:`${c.Platform} · ${c.Location}`, kind:'Audition'}); });
+casting.forEach(c => { const d = parseDate(c['Audition date']); if(d) upcoming.push({d, title:`Audition: ${c['Project / casting']}`, sub:[c.Platform,c.Location].filter(Boolean).join(' · '), kind:'Audition'}); });
 miles.forEach(m => { const d = parseDate(m['Target date']); if(d && dayDiff(d)>=0 && dayDiff(d)<=3) upcoming.push({d, title:m['Actionable milestone'], sub:`Milestone ${m['Milestone ID']} · ${projById[m['Project ID']]?.Project||''}`, kind:'Milestone'}); });
 const up = upcoming.filter(u => dayDiff(u.d) >= 0).sort((a,b)=>a.d-b.d).slice(0,5);
 $('#deadlines').innerHTML = `<h3>Coming up</h3>` + (up.length ? up.map(u => {
