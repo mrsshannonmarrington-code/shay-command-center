@@ -15,6 +15,8 @@ function parseDate(s){
   if(m) return new Date(+m[3], MON.indexOf(m[1]), +m[2]);
   m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
   if(m){ let y=+m[3]; if(y<100) y+=2000; return new Date(y, +m[1]-1, +m[2]); }
+  m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(m) return new Date(+m[1], +m[2]-1, +m[3]);
   if(/^\d{5}$/.test(s)){ const d = new Date(Date.UTC(1899,11,30) + (+s)*864e5); return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); }
   return null;
 }
@@ -50,7 +52,7 @@ const hours = tasks.filter(t => !/complete/i.test(t.Status)).reduce((a, t) => a 
 document.querySelectorAll('#stamp,#stamp2').forEach(el => el.innerHTML = `<i></i>Synced from Google Sheets · ${esc(D.updated)}` + (D.quick && el.id==='stamp' ? ` · <a class="qlink" href="${esc(D.quick)}" target="_blank" rel="noopener">Quick update →</a>` : ''));
 
 // ---------- HERO KPIs
-const unit = tasks.filter(t => t['Due Date']).map(t => ({t, d: parseDate(t['Due Date'])})).filter(x => x.d && dayDiff(x.d) >= 0).sort((a,b)=>a.d-b.d)[0];
+const unit = tasks.filter(t => t['Due Date'] && t.Status !== 'Completed').map(t => ({t, d: parseDate(t['Due Date'])})).filter(x => x.d && dayDiff(x.d) >= 0).sort((a,b)=>a.d-b.d)[0];
 const kp = [
   {l:'Projects', v:projects.length, s:`${projects.filter(p=>p.Phase==='Active').length} active · ${projects.filter(p=>p.Phase==='Backlog').length} backlog`},
   {l:'Open tasks', v:openTasks.length, s:`${doneTasks} completed · ${hours.toFixed(1)} hrs planned`},
@@ -63,9 +65,9 @@ $('#heroKpis').innerHTML = kp.map(k => `<div class="kpi ${k.a?'accent':''}"><spa
 // ---------- TODAY
 $('#todayLabel').textContent = `${DAYS[TODAY.getDay()]}, ${MON[TODAY.getMonth()]} ${TODAY.getDate()}, ${TODAY.getFullYear()}`;
 const upcoming = [];
-tasks.forEach(t => { const d = parseDate(t['Due Date']); if(d) upcoming.push({d, title:t['Small Objective'], sub:`Task ${t['Task ID']} · ${t['Definition of Done']}`, kind:'Due'}); });
+tasks.forEach(t => { const d = parseDate(t['Due Date']); if(d && t.Status!=='Completed') upcoming.push({d, title:t['Small Objective'], sub:`Task ${t['Task ID']} · ${t['Definition of Done']}`, kind:'Due'}); });
 casting.forEach(c => { const d = parseDate(c['Audition date']); if(d) upcoming.push({d, title:`Audition: ${c['Project / casting']}`, sub:[c.Platform,c.Location].filter(Boolean).join(' · '), kind:'Audition'}); });
-miles.forEach(m => { const d = parseDate(m['Target date']); if(d && dayDiff(d)>=0 && dayDiff(d)<=3) upcoming.push({d, title:m['Actionable milestone'], sub:`Milestone ${m['Milestone ID']} · ${projById[m['Project ID']]?.Project||''}`, kind:'Milestone'}); });
+miles.forEach(m => { const d = parseDate(m['Target date']); if(d && m.Status!=='Completed' && dayDiff(d)>=0 && dayDiff(d)<=3) upcoming.push({d, title:m['Actionable milestone'], sub:`Milestone ${m['Milestone ID']} · ${projById[m['Project ID']]?.Project||''}`, kind:'Milestone'}); });
 const up = upcoming.filter(u => dayDiff(u.d) >= 0).sort((a,b)=>a.d-b.d).slice(0,5);
 $('#deadlines').innerHTML = `<h3>Coming up</h3>` + (up.length ? up.map(u => {
   const dd = dayDiff(u.d);
@@ -162,7 +164,7 @@ $('#bookCountdown').innerHTML = cd + stats;
 $('#bookGrid').innerHTML = bk.slice().sort((a,b) => (a.nd||a.ld||9e15) - (b.nd||b.ld||9e15)).map(x => {
   const od = x.nd && dayDiff(x.nd) < 0;
   const due = x.nd ? `<span class="due ${od?'od':dayDiff(x.nd)<=7?'soon':''}">By ${fmt(x.nd)} · ${until(x.nd)}</span>` : `<span class="due none">No date set</span>`;
-  const launch = x.ld ? `<span class="launch">Launch ${fmt(x.ld)}, ${x.ld.getFullYear()}${dayDiff(x.ld)>=0?' · '+dayDiff(x.ld)+'d':''}</span>` : '';
+  const launch = x.ld ? `<span class="launch">Launch ${fmt(x.ld)}, ${x.ld.getFullYear()}${dayDiff(x.ld)>=0?' · '+dayDiff(x.ld)+'d':''}</span>` : (x['Launch target date']||'').trim() ? `<span class="launch">Launch: ${esc(x['Launch target date'].trim())}</span>` : '';
   return `<div class="book" style="--c:var(${sCol[seriesList.indexOf(x['Series / Project'])%sCol.length]})"><span class="series">${esc(x['Series / Project'])}</span><h4>${esc(x['Book / Volume'])}</h4><span class="stage">${esc(x.Stage)} · Manuscript ${esc(x['Manuscript verified?']).toLowerCase()}</span>${prTag(x.Priority)}<div class="next"><small>Next step</small>${esc(x['Next action'])}${due}</div>${launch}</div>`;
 }).join('');
 if (D.quick) { const q = document.getElementById('quickNav'); if (q) { q.href = D.quick; q.hidden = false; } }
