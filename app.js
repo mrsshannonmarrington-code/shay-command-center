@@ -47,7 +47,7 @@ const openTasks = tasks.filter(t => !/complete/i.test(t.Status));
 const doneTasks = tasks.length - openTasks.length;
 const hours = tasks.filter(t => !/complete/i.test(t.Status)).reduce((a, t) => a + (+t.Minutes || 0), 0) / 60;
 
-document.querySelectorAll('#stamp,#stamp2').forEach(el => el.innerHTML = `<i></i>Synced from Google Sheets · ${esc(D.updated)}`);
+document.querySelectorAll('#stamp,#stamp2').forEach(el => el.innerHTML = `<i></i>Synced from Google Sheets · ${esc(D.updated)}` + (D.quick && el.id==='stamp' ? ` · <a class="qlink" href="${esc(D.quick)}" target="_blank" rel="noopener">Quick update →</a>` : ''));
 
 // ---------- HERO KPIs
 const unit = tasks.filter(t => t['Due Date']).map(t => ({t, d: parseDate(t['Due Date'])})).filter(x => x.d && dayDiff(x.d) >= 0).sort((a,b)=>a.d-b.d)[0];
@@ -143,7 +143,29 @@ renderExec();
 // ---------- BOOKS
 const sCol = ['--accent','--plum','--teal','--gold','--accent','--plum'];
 const seriesList = [...new Set(books.map(x=>x['Series / Project']))];
-$('#bookGrid').innerHTML = books.map(x => `<div class="book" style="--c:var(${sCol[seriesList.indexOf(x['Series / Project'])%sCol.length]})"><span class="series">${esc(x['Series / Project'])}</span><h4>${esc(x['Book / Volume'])}</h4><span class="stage">${esc(x.Stage)} · Manuscript ${esc(x['Manuscript verified?']).toLowerCase()}</span>${prTag(x.Priority)}<div class="next">${esc(x['Next action'])}</div></div>`).join('');
+const until = d => { const n = dayDiff(d); return n === 0 ? 'today' : n > 0 ? `in ${n} day${n===1?'':'s'}` : `${-n} day${n===-1?'':'s'} overdue`; };
+const bk = books.map(x => ({...x, nd: parseDate(x['Next step target date']), ld: parseDate(x['Launch target date'])}));
+const launches = bk.filter(x => x.ld && dayDiff(x.ld) >= 0).sort((a,b) => a.ld - b.ld);
+const dated = bk.filter(x => x.nd || x.ld).length;
+const overdueSteps = bk.filter(x => x.nd && dayDiff(x.nd) < 0).length;
+const nextSteps = bk.filter(x => x.nd && dayDiff(x.nd) >= 0).sort((a,b) => a.nd - b.nd);
+const quick = D.quick ? `<a class="qbtn" href="${esc(D.quick)}" target="_blank" rel="noopener">Set dates in Quick Update →</a>` : '';
+let cd = '';
+if (launches.length) {
+  const L = launches[0], n = dayDiff(L.ld);
+  cd = `<div class="cd-hero"><span class="series">Next launch · ${esc(L['Series / Project'])}</span><h3>${esc(L['Book / Volume'])}</h3><div class="cd-num"><b>${n}</b><span>day${n===1?'':'s'} to launch · ${fmt(L.ld)}, ${L.ld.getFullYear()}</span></div>${L.nd ? `<p>Next: ${esc(L['Next action'])} · ${until(L.nd)}</p>` : `<p>Next: ${esc(L['Next action'])}</p>`}</div>`;
+} else {
+  cd = `<div class="cd-hero empty"><span class="series">Launch countdown</span><h3>No launch dates yet</h3><p>Add a launch target and a next-step date for each book. The countdown starts as soon as one is set.</p>${quick}</div>`;
+}
+const stats = `<div class="cd-stats"><div><b>${dated}</b><span>of ${bk.length} books dated</span></div><div><b>${launches.length}</b><span>launches scheduled</span></div><div><b class="${overdueSteps?'bad':''}">${overdueSteps}</b><span>next steps overdue</span></div><div><b>${nextSteps[0] ? fmt(nextSteps[0].nd) : '—'}</b><span>${nextSteps[0] ? 'next step due · ' + esc(nextSteps[0]['Book / Volume']) : 'no next-step dates'}</span></div></div>`;
+$('#bookCountdown').innerHTML = cd + stats;
+$('#bookGrid').innerHTML = bk.slice().sort((a,b) => (a.nd||a.ld||9e15) - (b.nd||b.ld||9e15)).map(x => {
+  const od = x.nd && dayDiff(x.nd) < 0;
+  const due = x.nd ? `<span class="due ${od?'od':dayDiff(x.nd)<=7?'soon':''}">By ${fmt(x.nd)} · ${until(x.nd)}</span>` : `<span class="due none">No date set</span>`;
+  const launch = x.ld ? `<span class="launch">Launch ${fmt(x.ld)}, ${x.ld.getFullYear()}${dayDiff(x.ld)>=0?' · '+dayDiff(x.ld)+'d':''}</span>` : '';
+  return `<div class="book" style="--c:var(${sCol[seriesList.indexOf(x['Series / Project'])%sCol.length]})"><span class="series">${esc(x['Series / Project'])}</span><h4>${esc(x['Book / Volume'])}</h4><span class="stage">${esc(x.Stage)} · Manuscript ${esc(x['Manuscript verified?']).toLowerCase()}</span>${prTag(x.Priority)}<div class="next"><small>Next step</small>${esc(x['Next action'])}${due}</div>${launch}</div>`;
+}).join('');
+if (D.quick) { const q = document.getElementById('quickNav'); if (q) { q.href = D.quick; q.hidden = false; } }
 
 // ---------- CAREER
 const paid = casting.map(c => ({...c, pay: +(c['Pay offered ($)']||'').replace(/[$,]/g,'') || 0})).filter(c => c.pay > 0).sort((a,b)=>b.pay-a.pay);
