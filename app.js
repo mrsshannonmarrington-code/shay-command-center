@@ -45,14 +45,14 @@ const budget = rows(S['Budget']);
 const email = rows(S['Agency Email']);
 const projById = Object.fromEntries(projects.map(p => [p.ID, p]));
 
-const openTasks = tasks.filter(t => !/complete/i.test(t.Status));
+const openTasks = tasks.filter(t => !/complete|^done$/i.test(t.Status));
 const doneTasks = tasks.length - openTasks.length;
-const hours = tasks.filter(t => !/complete/i.test(t.Status)).reduce((a, t) => a + (+t.Minutes || 0), 0) / 60;
+const hours = tasks.filter(t => !/complete|^done$/i.test(t.Status)).reduce((a, t) => a + (+t.Minutes || 0), 0) / 60;
 
 document.querySelectorAll('#stamp,#stamp2').forEach(el => el.innerHTML = `<i></i>Synced from Google Sheets · ${esc(D.updated)}` + (D.quick && el.id==='stamp' ? ` · <a class="qlink" href="${esc(D.quick)}" target="_blank" rel="noopener">Quick update →</a>` : ''));
 
 // ---------- HERO KPIs
-const unit = tasks.filter(t => t['Due Date'] && t.Status !== 'Completed').map(t => ({t, d: parseDate(t['Due Date'])})).filter(x => x.d && dayDiff(x.d) >= 0).sort((a,b)=>a.d-b.d)[0];
+const unit = tasks.filter(t => t['Due Date'] && !/complete|^done$/i.test(t.Status)).map(t => ({t, d: parseDate(t['Due Date'])})).filter(x => x.d && dayDiff(x.d) >= 0).sort((a,b)=>a.d-b.d)[0];
 const kp = [
   {l:'Projects', v:projects.length, s:Object.entries(projects.reduce((a,p)=>(a[p.Phase||'Other']=(a[p.Phase||'Other']||0)+1,a),{})).map(([k,v])=>`${v} ${k.toLowerCase()}`).join(' · ')},
   {l:'Open tasks', v:openTasks.length, s:`${doneTasks} completed · ${hours.toFixed(1)} hrs planned`},
@@ -65,9 +65,9 @@ $('#heroKpis').innerHTML = kp.map(k => `<div class="kpi ${k.a?'accent':''}"><spa
 // ---------- TODAY
 $('#todayLabel').textContent = `${DAYS[TODAY.getDay()]}, ${MON[TODAY.getMonth()]} ${TODAY.getDate()}, ${TODAY.getFullYear()}`;
 const upcoming = [];
-tasks.forEach(t => { const d = parseDate(t['Due Date']); if(d && t.Status!=='Completed') upcoming.push({d, title:t['Small Objective'], sub:`Task ${t['Task ID']} · ${t['Definition of Done']}`, kind:'Due'}); });
+tasks.forEach(t => { const d = parseDate(t['Due Date']); if(d && !/complete|^done$/i.test(t.Status)) upcoming.push({d, title:t['Small Objective'], sub:`Task ${t['Task ID']} · ${t['Definition of Done']}`, kind:'Due'}); });
 casting.forEach(c => { const d = parseDate(c['Audition date']); if(d) upcoming.push({d, title:`Audition: ${c['Project / casting']}`, sub:[c.Platform,c.Location].filter(Boolean).join(' · '), kind:'Audition'}); });
-miles.forEach(m => { const d = parseDate(m['Target date']); if(d && m.Status!=='Completed' && dayDiff(d)>=0 && dayDiff(d)<=3) upcoming.push({d, title:m['Actionable milestone'], sub:`Milestone ${m['Milestone ID']} · ${projById[m['Project ID']]?.Project||''}`, kind:'Milestone'}); });
+miles.forEach(m => { const d = parseDate(m['Target date']); if(d && !/complete|^done$/i.test(m.Status) && dayDiff(d)>=0 && dayDiff(d)<=3) upcoming.push({d, title:m['Actionable milestone'], sub:`Milestone ${m['Milestone ID']} · ${projById[m['Project ID']]?.Project||''}`, kind:'Milestone'}); });
 const up = upcoming.filter(u => dayDiff(u.d) >= 0).sort((a,b)=>a.d-b.d).slice(0,5);
 $('#deadlines').innerHTML = `<h3>Coming up</h3>` + (up.length ? up.map(u => {
   const dd = dayDiff(u.d);
@@ -110,14 +110,14 @@ $('#projGrid').innerHTML = projects.map(p => {
 const mDates = miles.map(m => parseDate(m['Target date'])).filter(Boolean);
 const start = new Date(Math.min(...mDates, TODAY) - 864e5), end = new Date(Math.max(...mDates) + 864e5);
 const span = Math.round((end - start)/864e5) + 1;
-const overdue = miles.filter(m => { const d=parseDate(m['Target date']); return d && dayDiff(d)<0 && !/complete/i.test(m.Status); });
-$('#msSummary').textContent = `${miles.length} milestones · ${miles.filter(m=>/complete/i.test(m.Status)).length} complete · ${overdue.length} past target`;
+const overdue = miles.filter(m => { const d=parseDate(m['Target date']); return d && dayDiff(d)<0 && !/complete|^done$/i.test(m.Status); });
+$('#msSummary').textContent = `${miles.length} milestones · ${miles.filter(m=>/complete|^done$/i.test(m.Status)).length} complete · ${overdue.length} past target`;
 const pos = d => ((d - start)/864e5) / span * 100;
 let tl = `<div class="tl-inner"><div class="tl-row" style="padding:0"><div></div><div class="tl-scale" style="grid-template-columns:repeat(${span},1fr)">`;
 for(let i=0;i<span;i++){ const d=new Date(start.getTime()+i*864e5); tl += `<span class="${+d===+TODAY?'today':''}">${i%2===0||+d===+TODAY?d.getDate():''}</span>`; }
 tl += `</div></div>`;
 miles.sort((a,b)=>parseDate(a['Target date'])-parseDate(b['Target date'])).forEach(m => {
-  const d = parseDate(m['Target date']); const od = dayDiff(d)<0 && !/complete/i.test(m.Status);
+  const d = parseDate(m['Target date']); const od = dayDiff(d)<0 && !/complete|^done$/i.test(m.Status);
   tl += `<div class="tl-row"><div class="lbl" title="${esc(m['Actionable milestone'])}"><small>${esc(m['Milestone ID'])}</small>${esc(m['Actionable milestone'])}</div><div class="tl-track"><div class="tl-today" style="left:${pos(TODAY)}%"></div><div class="tl-dot ${esc(m.Priority)} ${od?'overdue':''}" style="left:${pos(d)}%;width:${100/span}%" title="${esc(m['Target date'])} · ${esc(m['Definition of done'])} · ${esc(m.Status)}${od?' · past target':''}"></div></div></div>`;
 });
 tl += `</div><div class="legend" style="margin-top:14px"><span><i style="background:var(--accent)"></i>High</span><span><i style="background:var(--plum)"></i>Medium</span><span><i style="background:var(--teal)"></i>Low</span><span><i style="background:transparent;outline:2px solid var(--bad)"></i>Past target, not complete</span><span style="color:var(--accent)">${MON[start.getMonth()]} ${start.getDate()} – ${fmt(end)} · line marks today</span></div>`;
@@ -175,7 +175,7 @@ const platforms = {}; casting.forEach(c => platforms[c.Platform] = (platforms[c.
 const byDay = {}; casting.forEach(c => { const d = parseDate(c.Date); if(d){ const k = +d; byDay[k]=(byDay[k]||0)+1; } });
 const auditions = casting.filter(c => c['Audition date']).length;
 const booked = casting.filter(c => /yes|booked/i.test(c['Booked?']) || /booked/i.test(c.Status)).length;
-const ckDone = check.filter(c => c['Completed (1/0)']==='1' || /complete/i.test(c.Status)).length;
+const ckDone = check.filter(c => c['Completed (1/0)']==='1' || /complete|^done$/i.test(c.Status)).length;
 const ck = [
   {l:'Submissions', v:casting.length, s:'casting applications'},
   {l:'Paid w/ rate', v:paid.length, s:`up to ${money(paid[0]?.pay||0)}`},
