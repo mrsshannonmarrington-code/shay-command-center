@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PERMIT TO DRIVE | Shannon Arrington</title><meta name="description" content="Try an illustrated Maryland learner’s permit practice question and open the full practice test."><link rel="stylesheet" href="../assets/site.css"></head>
+<body class="drive"><a class="skip" href="#content">Skip to content</a><header class="bar"><a class="brand" href="../">Shannon Arrington</a><nav aria-label="Main navigation"><a href="../">Home</a><a href="../them-kids/">Books</a><a href="../projects/">Projects</a></nav></header>
+<main id="content">
+<section class="hero permit"><div><p class="eyebrow">Maryland learner’s permit prep</p><h1>PERMIT<br>TO DRIVE</h1><p class="intro">Practice road signs and driving scenarios, review explanations, or take a timed 25-question test.</p><a class="button" href="https://mrsshannonmarrington-code.github.io/permit-to-drive/">Start free practice</a></div><img src="../assets/stop.webp" alt="A stop sign at a neighborhood intersection, viewed from a blue car" width="1280" height="721"></section>
+<section class="section sample"><h2>Try a sample question</h2><p>What should you do when you approach a stop sign at an empty intersection?</p><div class="answers"><button type="button" data-correct="true">Come to a complete stop and yield before proceeding</button><button type="button" data-correct="false">Slow down only if another car is approaching</button><button type="button" data-correct="false">Yield without stopping</button></div><p id="feedback" role="status"></p><script>
+document.querySelectorAll('[data-correct]').forEach(button => button.addEventListener('click', () => {
+ const correct = button.dataset.correct === 'true';
+ document.querySelector('#feedback').textContent = correct
+  ? 'Correct. Stop at the stop line, before the crosswalk if there is no line, or before entering the intersection. Yield before proceeding.'
+  : 'Try again. A stop sign requires a complete stop even when the intersection appears empty.';
+}));</script></section>
+<section class="section"><p>Independent Maryland permit practice.</p><a class="quiet" href="https://mva.maryland.gov/licenses-ids/prepare-drivers-license-test/knowledge-tests">Maryland MVA knowledge test information</a></section></main><footer><span>Shannon Arrington</span><a href="../them-kids/">THEM KIDS</a><a href="../projects/">Projects</a></footer></body></html>
