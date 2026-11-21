@@ -59,3 +59,12 @@ footer span{margin-right:auto;font-weight:700}
 @media(max-width:740px){.hero,.book-grid,.project-grid,.next{grid-template-columns:1fr}.hero{min-height:0}.cover-stack{max-width:27rem;width:100%;margin:auto;min-height:22rem}.detail-image img{width:min(65%,15rem)}.nav{gap:.5rem}}
 @media(max-width:390px){.bar{align-items:flex-start;flex-direction:column}.cover-stack{min-height:17rem}}
 @media print{.bar,footer,.skip,#print{display:none}.worksheet{padding:0;color:black}body{background:white}}
+
+.catalog{max-width:85rem;margin-inline:auto}
+.catalog-section{margin-top:3rem}
+.catalog-feature,.catalog-card{background:var(--panel);border:1px solid var(--line);border-radius:1rem;padding:clamp(1rem,3vw,2rem)}
+.catalog-feature{display:grid;align-items:center;grid-template-columns:1fr repeat(2,minmax(4rem,8rem));gap:1rem;margin-top:1.5rem}
+.catalog-feature img{width:100%;border-radius:.25rem}
+.catalog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));gap:1rem;margin-top:1rem}
+.catalog-card h3{margin-bottom:.9rem}
+@media(max-width:560px){.catalog-feature{grid-template-columns:repeat(2,minmax(0,7rem))}.catalog-feature div{grid-column:1/-1}}
