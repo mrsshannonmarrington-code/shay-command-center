@@ -1,18 +1,59 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MoneyTycoon | Escape Interactive Studios</title><meta name="description" content="Discover MoneyTycoon, a business simulation game in development, and see how the first playtest will work."><link rel="stylesheet" href="../assets/site.css">
-<style>
-body.game{color:#fff7e9;background:#14171c;--line:#444248;--muted:#ded1af;--purple:#efc575;--ink:#fff7e9;color-scheme:dark}
-.game .button{background:#efc575;color:#23190c}.game .eyebrow{color:var(--muted)}
-.game .game-hero{background:radial-gradient(ellipse at top right,#4a3822,transparent 67%),#202329;padding:clamp(3.5rem,12vw,9rem) max(5vw,1rem);border-bottom:1px solid var(--line)}
-.game h1{font-size:clamp(2.75rem,10vw,9rem);max-width:none;overflow-wrap:anywhere}
-.game .section{max-width:76rem;margin:auto}.game .stage-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;list-style:none;padding:0;margin:1.5rem 0 0}
-.game .stage-list li{border:1px solid var(--line);border-radius:.7rem;padding:1.15rem;background:#202329}
-.game .stage-list h3{font-size:1.7rem}.game .status{border-left:3px solid #efc575;padding:.2rem 0 .2rem 1rem;margin:1.4rem 0}
-@media(max-width:650px){.game .stage-list{grid-template-columns:1fr}.bar{align-items:flex-start;flex-direction:column}.bar nav{flex-wrap:wrap}}
-</style></head>
-<body class="game"><a class="skip" href="#content">Skip to content</a><header class="bar"><a class="brand" href="../">Shannon Arrington</a><nav aria-label="Main navigation"><a href="../catalog/">Books</a><a href="../freebies/">Freebies</a><a href="../projects/">Projects</a></nav></header>
-<main id="content">
-<section class="game-hero"><p class="eyebrow">Escape Interactive Studios</p><h1>MoneyTycoon</h1><p class="intro">Start with one business. Decide what to invest in, where to expand, and how to turn your first venture into an empire.</p><p>Business simulation · In development</p><div class="actions"><a class="button" href="#playtest">See playtest plans</a></div></section>
-<section class="section" id="playtest"><h2>Playtest and release</h2><div class="status"><strong>Beta signups are closed.</strong><p>When recruiting opens, this page will list supported devices, how to apply, and how selected testers will get access.</p></div>
-<ol class="stage-list"><li><h3>Closed beta</h3><p>A small invite-only group will try the first playable build and report where they get stuck.</p></li><li><h3>Expanded beta</h3><p>More testers will be invited once the core gameplay and save progress are stable.</p></li><li><h3>Full release</h3><p>The launch date and storefront link will appear here once they’re confirmed.</p></li></ol></section>
-</main><footer><span>Escape Interactive Studios</span><a href="../projects/">See other projects</a></footer></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0a0c">
+<meta name="description" content="Explore the world of MoneyTycoon, a business simulation in development at Escape Interactive Studios.">
+<title>MoneyTycoon | Escape Interactive Studios</title>
+<link rel="stylesheet" href="game.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar shell">
+<a class="brand" href="./"><span class="mark" aria-hidden="true"></span><span>Money<span class="gold">Tycoon</span></span></a>
+<nav aria-label="Game navigation"><a href="#world">The world</a><a href="#playtest">Playtest</a><a href="../projects/">Projects</a></nav>
+</header>
+<main id="main">
+<section class="hero" aria-labelledby="pitch">
+<div class="hero-art art hq" role="img" aria-label="Concept art of an executive command desk overlooking New York at dusk"></div>
+<div class="hero-copy shell">
+<p class="label">Escape Interactive Studios</p>
+<h1 id="pitch">Build.<br>Invest.<br><span class="gold">Dominate.</span></h1>
+<p class="intro">Open your first business, put your profits to work, and grow from a modest startup into a global financial empire.</p>
+<div class="actions"><a class="button" href="#world">Explore the world</a><a class="text-link" href="#playtest">Playtest plans</a></div>
+</div>
+<p class="hero-caption">Executive headquarters · Concept art</p>
+</section>
+<section class="shell section" id="world">
+<div class="section-heading"><p class="label">The MoneyTycoon world</p><h2>See what growth looks like.</h2><p>Explore three places that show how the world changes as your business grows.</p></div>
+<div class="world">
+<div class="world-views">
+<details open name="world-view">
+<summary>Executive headquarters</summary>
+<div class="scene"><div class="art hq" role="img" aria-label="Executive headquarters with a financial dashboard and sunset skyline"></div><div class="scene-copy"><h3>From startup desk to command center</h3><p>As your empire grows, your headquarters evolves with it, from a modest workspace to a skyline office where you oversee the whole operation.</p></div></div>
+</details>
+<details name="world-view">
+<summary>Ember Coffee</summary>
+<div class="scene"><div class="art ember" role="img" aria-label="Ember Coffee’s five building tiers, from kiosk to roastery and flagship"></div><div class="scene-copy"><h3>Start small. Build a flagship.</h3><p>See how Ember Coffee changes as it grows from a single kiosk into a café, drive-thru, flagship, and roastery.</p></div></div>
+</details>
+<details name="world-view">
+<summary>Living city</summary>
+<div class="scene"><div class="art city" role="img" aria-label="Nighttime city district with shops, hotels, offices, and traffic"></div><div class="scene-copy"><h3>Watch your businesses change the city</h3><p>Upgrade properties and expand into new districts. Customers, deliveries, and nighttime storefronts make the city feel active.</p></div></div>
+</details>
+</div>
+<p class="fine">Scenes from the approved MoneyTycoon concept board.</p>
+</div>
+</section>
+<section class="shell section capital" aria-labelledby="capital-title">
+<div class="art map" role="img" aria-label="Concept map showing an investment network across global cities"></div>
+<div><p class="label">Investments &amp; real estate</p><h2 id="capital-title">Decide where your money goes next.</h2><p>Reinvest profits in your businesses, build an investment portfolio, or acquire property as you expand into new markets.</p></div>
+</section>
+<section class="shell section" id="playtest">
+<div class="section-heading"><p class="label">In development</p><h2>Playtest and release</h2><p><strong>Beta signups are closed.</strong> Supported devices and application instructions will be posted here when recruiting opens.</p></div>
+<ol class="stages"><li><h3>Closed beta</h3><p>A small invite-only group will test the first playable build and report where they get stuck.</p></li><li><h3>Expanded beta</h3><p>More testers will be invited once the core gameplay and save progress are stable.</p></li><li><h3>Full release</h3><p>The launch date and store links will appear here once confirmed.</p></li></ol>
+</section>
+</main>
+<footer class="bar shell"><span>Escape Interactive Studios</span><a href="../projects/">See other projects</a></footer>
+</body>
+</html>
